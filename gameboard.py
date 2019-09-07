@@ -16,12 +16,3 @@ class Board:
             print('That space is already taken.')
             return
         self.board[row-1][column-1] = f'{marker}'
-
-
-# tictac = Board(3, 3)
-# tictac.make_move('X', 2, 2)
-# tictac.make_move('O', 3, 3)
-# tictac.make_move('X', 1, 2)
-# tictac.make_move('O', 3, 2)
-
-# print(tictac)
