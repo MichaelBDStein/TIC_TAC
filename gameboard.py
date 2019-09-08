@@ -10,6 +10,9 @@ class Board:
             board_string = board_string[:-1]
             board_string += '\n'
         return board_string
+    
+    def __getitem__(self, key):
+        return self.board[key]
 
     def make_move(self, marker, row, column):
         if self.board[row-1][column-1] != '_':
