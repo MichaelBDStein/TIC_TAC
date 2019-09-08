@@ -1,10 +1,37 @@
-# def max_value(value, depth, alpha, beta):
-#     if depth == 0 and value:
-#         return value
+from math import inf
+from copy import deepcopy
 
 
-# def min_value(value, depth, alpha, beta):
-#     return
+def max_value(board):
+    if not board.available_spaces:
+        return 0
+    value = -inf
+    for row, column in board.available_spaces:
+        temp_board = deepcopy(board)
+        temp_board.make_move('X', row, column)
+        print(f'MAX PRINT\n{temp_board}')
+        if check_win(temp_board, 'X'):
+            print('MAX PRINT - win')
+            return inf
+        value = max(value, min_value(temp_board))
+    print('MAX PRINT', value)
+    return value
+
+
+def min_value(board):
+    if not board.available_spaces:
+        return 0
+    value = inf
+    for row, column in board.available_spaces:
+        temp_board = deepcopy(board)
+        temp_board.make_move('O', row, column)
+        print(f'MIN PRINT\n{temp_board}')
+        if check_win(temp_board, 'O'):
+            print('MIN PRINT - win')
+            return -inf
+        value = min(value, max_value(temp_board))
+    print('MIN PRINT', value)
+    return value
 
 
 def check_win(board, marker):
@@ -35,6 +62,3 @@ def check_win(board, marker):
         if win:
             return True
     return False
-
-
-available_spaces = [(x, y) for x in range(3) for y in range(3)]
