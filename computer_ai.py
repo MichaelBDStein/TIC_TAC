@@ -12,7 +12,7 @@ def max_value(board, good_marker, bad_marker, alpha=-inf, beta=inf):
     for row, column in board.available_spaces:
         temp_board = deepcopy(board)
         temp_board.make_move(good_marker, row, column)
-        if check_win(temp_board, good_marker):
+        if temp_board.check_win(good_marker):
             return inf
         value = max(value, min_value(
             temp_board, good_marker, bad_marker, alpha, beta))
@@ -29,7 +29,7 @@ def min_value(board, good_marker, bad_marker, alpha=-inf, beta=inf):
     for row, column in board.available_spaces:
         temp_board = deepcopy(board)
         temp_board.make_move(bad_marker, row, column)
-        if check_win(temp_board, bad_marker):
+        if temp_board.check_win(bad_marker):
             return -inf
         value = min(value, max_value(
             temp_board, good_marker, bad_marker, alpha, beta))
@@ -43,48 +43,15 @@ def min_value(board, good_marker, bad_marker, alpha=-inf, beta=inf):
 # However, we need a board position for the next move to be returned, not just the value of the line of play.
 # Since we don't care about the board positions for plays on deeper plys during the minimax recursion,
 # and since it would hurt readability to have row and column variables being thrown back up the stack in the recursive call,
-# I decided to separate the root node of the game tree, making it a simple iteration that saves the row and column associated with the best value play.
+# I decided to separate the root node of the game tree, making it a simple iteration that saves the row and column associated with the highest value play.
 def decide_next_move(board, good_marker, bad_marker):
-    best_option = [-inf, (None, None)]
+    best_option = [-inf, (None)]
     for row, column in board.available_spaces:
         considering = deepcopy(board)
         considering.make_move(good_marker, row, column)
         result = min_value(considering, good_marker, bad_marker)
-        if result > best_option[0]:
+        if result > best_option[0] or not best_option[1]:
             best_option = [result, (row, column)]
             if best_option[0] == inf:
                 break
     return best_option[1]
-
-
-# This is a weak solution for check win state.
-# It's the same as simply run 8 if true statements for the 8 possible 3-in-a-rows. I just made it a little bit cuter.
-# I intend on increasing the intelligence of this, so that it can handle larger boards and varying lengths for the winning run.
-def check_win(board, marker):
-    winning_rows = [[(0, 0), (0, 1), (0, 2)], [
-        (1, 0), (1, 1), (1, 2)], [(2, 0), (2, 1), (2, 2)]]
-    winning_columns = [[(0, 0), (1, 0), (2, 0)], [
-        (0, 1), (1, 1), (2, 1)], [(0, 2), (1, 2), (2, 2)]]
-    winning_diagonals = [[(0, 0), (1, 1), (2, 2)], [(0, 2), (1, 1), (2, 0)]]
-    for row in winning_rows:
-        win = True
-        for x, y in row:
-            if board[x][y] != marker:
-                win = False
-        if win:
-            return True
-    for col in winning_columns:
-        win = True
-        for x, y in col:
-            if board[x][y] != marker:
-                win = False
-        if win:
-            return True
-    for diag in winning_diagonals:
-        win = True
-        for x, y in diag:
-            if board[x][y] != marker:
-                win = False
-        if win:
-            return True
-    return False
