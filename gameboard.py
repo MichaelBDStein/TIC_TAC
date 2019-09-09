@@ -6,13 +6,22 @@ class Board:
         self.available_spaces = [(x, y) for x in range(rows)
                                  for y in range(columns)]
 
+    # Prints a human-readable form of the board, without changing how the data is stored.
+    # Adds numbers to the right and bottom sides of the board to indicate row and column number.
+    # Currently, going beyond 10 columns will misalign the column markers, since the labels become 2 digits wide.
     def __repr__(self):
         board_string = ''
+        row_label = 0
         for row in self.board:
             for column in row:
                 board_string += str(column) + '|'
             board_string = board_string[:-1]
-            board_string += '\n'
+            row_label += 1
+            board_string += f' {row_label}\n'
+        column_labels = ''
+        for i in range(self.columns):
+            column_labels += f'{i+1} '
+        board_string += column_labels
         return board_string
 
     def __getitem__(self, key):
