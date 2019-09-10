@@ -49,7 +49,8 @@ def decide_next_move(board, good_marker, bad_marker):
     for row, column in board.available_spaces:
         considering = deepcopy(board)
         considering.make_move(good_marker, row, column)
-        result = min_value(considering, good_marker, bad_marker)
+        result = min_value(considering, good_marker,
+                           bad_marker, best_option[0])
         if result > best_option[0] or not best_option[1]:
             best_option = [result, (row, column)]
             if best_option[0] == inf:

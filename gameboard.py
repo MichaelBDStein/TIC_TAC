@@ -36,13 +36,26 @@ class Board:
 
     def check_game_end(self):
         if self.check_win('O'):
-            print('Game over. \'O\' wins!')
             return 'O'
         if self.check_win('X'):
-            print('Game over. \'X\' wins!')
             return 'X'
         if not self.available_spaces:
-            print('Game over. It\'s a tie.')
+            return 'Tie'
+
+    # The same function as check_game_end, but with print statements.
+    # Separated so that I could control flow without necessarily printing.
+    def announce_game_end(self):
+        if self.check_win('O'):
+            print('\nGame over. \'O\' wins!')
+            print(self)
+            return 'O'
+        if self.check_win('X'):
+            print('\nGame over. \'X\' wins!')
+            print(self)
+            return 'X'
+        if not self.available_spaces:
+            print('\nGame over. It\'s a tie.')
+            print(self)
             return 'Tie'
 
     # This is a weak solution for check win state.
